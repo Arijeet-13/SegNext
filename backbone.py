@@ -163,7 +163,7 @@ class MSCANet(nn.Module):
         self.depths = depths
         self.num_stages = num_stages
         # stochastic depth decay rule (similar to linear decay) / just like matplot linspace
-        dpr = [x.item() for x in torch.linspace(0, drop_path, sum(depths))]
+        dpr = [x.item() for x in torch.linspace(0, drop_path, steps=sum(depths))]
         cur = 0
 
         for i in range(num_stages):
