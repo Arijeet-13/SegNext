@@ -1,13 +1,16 @@
-# Kaggle P100 (Linux) recommended versions.
-# Install torch from the official CUDA wheel index.
---extra-index-url https://download.pytorch.org/whl/cu121
+# Kaggle P100 (Pascal, sm_60) needs a CUDA build that still includes sm_60 kernels.
+# Use the official CUDA 11.8 wheel index (the newer CUDA 12.x wheels often drop Pascal).
+--index-url https://download.pytorch.org/whl/cu118
 
-torch==2.1.2
-torchvision==0.16.2
-torchaudio==2.1.2
+# Let pip resolve the latest torch/vision/audio compatible with your Python on Kaggle,
+# while staying on CUDA 11.8.
+torch
+torchvision
+torchaudio
 
-transformers==4.39.3
-accelerate==0.27.2
+# Transformers stack (Trainer)
+transformers>=4.39,<5.0
+accelerate>=0.27,<1.0
 numpy==1.26.4
 pillow==10.2.0
 pyyaml==6.0.1
