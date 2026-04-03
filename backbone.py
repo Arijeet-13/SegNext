@@ -1,7 +1,4 @@
 #%%
-import yaml
-with open('config.yaml') as fh:
-    config = yaml.load(fh, Loader=yaml.FullLoader)
 import torch
 import torch.nn as nn
 import math
