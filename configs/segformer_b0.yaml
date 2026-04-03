@@ -1,0 +1,46 @@
+
+model:
+  name: segformer-b0
+  pretrained_checkpoint: nvidia/segformer-b0-finetuned-ade-512-512
+  num_classes: 26
+  image_size: 512
+
+dataset:
+  name: idd
+  ignore_index: 255
+  reduce_labels: false
+
+training:
+  epochs: 60
+  train_batch_size: 1
+  val_batch_size: 1
+  learning_rate: 0.00006
+  weight_decay: 0.01
+  warmup_ratio: 0.1
+  gradient_accumulation_steps: 4
+  save_strategy: epoch
+  eval_strategy: epoch
+  logging_steps: 50
+  seed: 42
+  save_total_limit: 3
+  dataloader_num_workers: 2
+
+optimizer:
+  name: adamw
+  betas: [0.9, 0.999]
+  eps: 1.0e-8
+
+scheduler:
+  name: linear
+
+paths:
+  data_root: data/raw
+  train_split: data/splits/train.txt
+  val_split: data/splits/val.txt
+  test_split: data/splits/test.txt
+  output_dir: outputs/segformer_b0
+
+hardware:
+  fp16: true
+  num_workers: 2
+  pin_memory: true

@@ -19,7 +19,7 @@ class SegNext(nn.Module):
                                       nn.Conv2d(dec_outChannels, num_classes, kernel_size=1))
         self.encoder = MSCANet(in_channnels=in_channnels, embed_dims=embed_dims,
                                ffn_ratios=ffn_ratios, depths=depths, num_stages=num_stages,
-                               dropout=dropout, drop_path=drop_path)
+                               drop_path=drop_path)
         self.decoder = HamDecoder(
             outChannels=dec_outChannels, config=config, enc_embed_dims=embed_dims)
         self.init_weights()
@@ -42,7 +42,7 @@ class SegNext(nn.Module):
         enc_feats = self.encoder(x)
         dec_out = self.decoder(enc_feats)
         output = self.cls_conv(dec_out)  # here output will be B x C x H/8 x W/8
-        output = F.interpolate(output, size=x.size()[-2:], mode='bilinear', align_corners=True) #now its same as input
+        output = F.interpolate(output, size=x.size()[-2:], mode='bilinear', align_corners=False) #now its same as input
         #  bilinear interpol was used originally
         return output
 

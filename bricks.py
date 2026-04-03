@@ -5,16 +5,15 @@ with open('config.yaml') as fh:
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from sync_bn.nn.modules import SynchronizedBatchNorm2d
 from functools import partial
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-norm_layer = partial(SynchronizedBatchNorm2d, momentum=float(config['SyncBN_MOM']))
+norm_layer = partial(nn.SyncBatchNorm, momentum=float(config.get('SyncBN_MOM', 0.1)))
 
 class myLayerNorm(nn.Module):
     def __init__(self, inChannels):
         super().__init__()
-        self.norm == nn.LayerNorm(inChannels, eps=1e-5)
+        self.norm = nn.LayerNorm(inChannels, eps=1e-5)
 
     def forward(self, x):
         # reshaping only to apply Layer Normalization layer
@@ -39,7 +38,7 @@ class NormLayer(nn.Module):
             self.norm = norm_layer(inChannels)
         elif norm_type == 'layer_norm':
             # print('Adding Layer Norm layer') # for testing
-            self.norm == nn.myLayerNorm(inChannels)
+            self.norm = myLayerNorm(inChannels)
         else:
             raise NotImplementedError
 
@@ -125,7 +124,7 @@ def resize(input,
            size=None,
            scale_factor=None,
            mode='bilinear',
-           align_corners=None,
+           align_corners=False,
            warning=True):
 
     return F.interpolate(input, size, scale_factor, mode, align_corners)
@@ -189,9 +188,10 @@ class ConvBNRelu(nn.Module):
 
 class SeprableConv2d(nn.Module):
     def __init__(self, inChannels, outChannels, kernal_size=3, bias=False):
-        self.dwconv = nn.Conv2d(inChannels, inChannels, kernal_size=kernal_size,
+        super().__init__()
+        self.dwconv = nn.Conv2d(inChannels, inChannels, kernel_size=kernal_size,
                                 groups=inChannels, bias=bias)
-        self.pwconv = nn.Conv2d(inChannels, inChannels, kernal_size=1, bias=bias)
+        self.pwconv = nn.Conv2d(inChannels, outChannels, kernel_size=1, bias=bias)
 
     def forward(self, x):
 
