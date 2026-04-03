@@ -36,8 +36,8 @@ scheduler:
   min_lr: 0.0
 
 paths:
-  image_root: /kaggle/input/idd20k_final
-  label_root: /kaggle/input/idd20k_final
+  image_root: /kaggle/input/datasets/abhishekprajapat/idd-20k/idd20k_final
+  label_root: /kaggle/input/datasets/abhishekprajapat/idd-20k/idd20k_final
   train_split: /kaggle/working/splits/train.txt
   val_split: /kaggle/working/splits/val.txt
   test_split: data/splits/test.txt
