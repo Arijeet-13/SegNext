@@ -1,12 +1,9 @@
 import os
-import sys
 import torch
 import torch.nn as nn
 from transformers import SegformerImageProcessor
 
-# Add SegNext to path so that internal imports work
-sys.path.append(os.path.join(os.path.dirname(__file__), "SegNext"))
-from SegNext.model import SegNext
+from models.SegNext.model import SegNext
 
 class SegNextWrapper(nn.Module):
     def __init__(self, num_classes):
