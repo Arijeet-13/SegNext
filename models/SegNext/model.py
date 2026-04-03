@@ -18,7 +18,7 @@ class SegNext(nn.Module):
                                       nn.Conv2d(dec_outChannels, num_classes, kernel_size=1))
         self.encoder = MSCANet(in_channnels=in_channnels, embed_dims=embed_dims,
                                ffn_ratios=ffn_ratios, depths=depths, num_stages=num_stages,
-                               dropout=dropout, drop_path=drop_path)
+                               drop_path=drop_path)
         self.decoder = HamDecoder(
             outChannels=dec_outChannels, config=config, enc_embed_dims=embed_dims)
         self.init_weights()
