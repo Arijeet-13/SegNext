@@ -6,7 +6,7 @@ from transformers import SegformerImageProcessor
 from model import SegNext
 
 class SegNextForHF(nn.Module):
-    def __init__(self, num_classes, pretrained_path=None):
+    def __init__(self, num_classes, pretrained_path=None, config=None):
         super().__init__()
         # SegNeXt-Large config estimate
         self.segnext = SegNext(
@@ -17,7 +17,7 @@ class SegNextForHF(nn.Module):
             depths=[3, 5, 27, 3],
             num_stages=4,
             dec_outChannels=1024, # Adjust if needed
-            dropout=0.1,
+            config=config,
             drop_path=0.2
         )
         self.num_labels = num_classes
@@ -72,8 +72,8 @@ class SegNextForHF(nn.Module):
         os.makedirs(save_dir, exist_ok=True)
         torch.save(self.state_dict(), os.path.join(save_dir, "pytorch_model.bin"))
 
-def load_segnext_large(num_classes, pretrained_path=None, image_size=768):
-    model = SegNextForHF(num_classes=num_classes, pretrained_path=pretrained_path)
+def load_segnext_large(num_classes, pretrained_path=None, image_size=768, hamburger_cfg=None):
+    model = SegNextForHF(num_classes=num_classes, pretrained_path=pretrained_path, config=hamburger_cfg)
     # Using Segformer image processor as a generic ImageNet normalizer
     processor = SegformerImageProcessor(
         size={"height": image_size, "width": image_size} if isinstance(image_size, int) else image_size,

@@ -1,7 +1,5 @@
 #%%
-import yaml, math, os
-with open('config.yaml') as fh:
-    config = yaml.load(fh, Loader=yaml.FullLoader)
+import math, os
 import torch
 import torch.nn.functional as F
 import torch.nn as nn
@@ -9,11 +7,10 @@ import torch.nn as nn
 from backbone import MSCANet
 from decoder import HamDecoder
 
-
 class SegNext(nn.Module):
-    def __init__(self, num_classes, in_channnels=3, embed_dims=[32, 64, 460, 256],
+    def __init__(self, num_classes, config, in_channnels=3, embed_dims=[32, 64, 460, 256],
                  ffn_ratios=[4, 4, 4, 4], depths=[3, 3, 5, 2], num_stages=4,
-                 dec_outChannels=256, config=config, dropout=0.0, drop_path=0.0):
+                 dec_outChannels=256, dropout=0.0, drop_path=0.0):
         super().__init__()
         self.cls_conv = nn.Sequential(nn.Dropout2d(p=0.1),
                                       nn.Conv2d(dec_outChannels, num_classes, kernel_size=1))

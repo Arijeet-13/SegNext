@@ -1,9 +1,8 @@
 #%%
 
-from turtle import forward
 import torch
+from torch import nn
 import torch.nn.functional as F
-import torch.nn as nn
 
 from hamburger import HamBurger
 from bricks import SeprableConv2d, ConvRelu, ConvBNRelu, resize

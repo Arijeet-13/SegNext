@@ -11,9 +11,7 @@ r'''
 
 '''
 #%%
-import yaml
-with open('config.yaml') as fh:
-    config = yaml.load(fh, Loader=yaml.FullLoader)
+
 
 import math
 import torch

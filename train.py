@@ -389,6 +389,7 @@ def main():
         num_classes=cfg["model"]["num_classes"],
         pretrained_path=cfg["model"]["pretrained_checkpoint"],
         image_size=cfg["model"]["image_size"],
+        hamburger_cfg=cfg["hamburger"],
     )
 
     processor.do_reduce_labels = cfg["dataset"]["reduce_labels"]
