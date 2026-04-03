@@ -1,0 +1,54 @@
+model:
+  name: segnext_large
+  # Point this to the IDD pretrain best model directory produced above.
+  # Example: /kaggle/working/outputs/segnext_large_idd_pretrain/best_model
+  pretrained_checkpoint: /kaggle/working/outputs/segnext_large_idd_pretrain/best_model
+  num_classes: 26
+  image_size: 1024
+
+dataset:
+  name: idd_aw
+  ignore_index: 255
+  reduce_labels: false
+
+training:
+  # Finetune: smaller LR, fewer epochs
+  epochs: 30
+  train_batch_size: 1
+  val_batch_size: 1
+  learning_rate: 0.00001
+  weight_decay: 0.01
+  warmup_ratio: 0.1
+  gradient_accumulation_steps: 8
+  save_strategy: epoch
+  eval_strategy: epoch
+  logging_steps: 50
+  seed: 42
+  save_total_limit: 3
+  dataloader_num_workers: 2
+  early_stopping_patience: 8
+
+optimizer:
+  name: adamw
+  betas: [0.9, 0.999]
+  eps: 1.0e-8
+
+scheduler:
+  name: polynomial
+  power: 1.0
+  min_lr: 0.0
+
+paths:
+  # Update these three paths to match your IDD-AW dataset location and split files.
+  image_root: /kaggle/input/idd-aw/iddaw
+  label_root: /kaggle/input/idd-aw/iddaw
+  train_split: /kaggle/working/splits_aw/train.txt
+  val_split: /kaggle/working/splits_aw/val.txt
+  output_dir: /kaggle/working/outputs/segnext_large_idd_aw_finetune
+  best_model_dir: /kaggle/working/outputs/segnext_large_idd_aw_finetune/best_model
+
+hardware:
+  fp16: true
+  num_workers: 2
+  pin_memory: true
+

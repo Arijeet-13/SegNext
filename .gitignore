@@ -1,0 +1,8 @@
+run_piafusion.bat
+__pycache__
+*.pyc
+_check_keys.py
+_check_output.txt
+_check_sea.py
+_keys.txt
+data/
