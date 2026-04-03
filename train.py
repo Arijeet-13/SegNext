@@ -444,7 +444,11 @@ def main():
         num_train_epochs=cfg["training"]["epochs"],
         weight_decay=cfg["training"]["weight_decay"],
         gradient_accumulation_steps=cfg["training"]["gradient_accumulation_steps"],
-        evaluation_strategy=cfg["training"]["eval_strategy"],
+        **(
+            {"eval_strategy": cfg["training"]["eval_strategy"]}
+            if "eval_strategy" in TrainingArguments.__init__.__code__.co_varnames
+            else {"evaluation_strategy": cfg["training"]["eval_strategy"]}
+        ),
         save_strategy=cfg["training"]["save_strategy"],
         save_total_limit=cfg["training"].get("save_total_limit", 3),
         logging_steps=cfg["training"]["logging_steps"],
