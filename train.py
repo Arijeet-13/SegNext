@@ -1,24 +1,22 @@
-import yaml
+import argparse
 import os
+import yaml
+
+import numpy as np
 import torch
 import torch.nn.functional as F
-import numpy as np
-
 from transformers import (
-    TrainingArguments,
-    Trainer,
-    default_data_collator,
-    TrainerCallback,
     EarlyStoppingCallback,
+    Trainer,
+    TrainerCallback,
+    TrainingArguments,
+    default_data_collator,
 )
 
-from models import load_segformer_b3, load_segnext_large
-import argparse
 from datalib.idd_dataset import IDDDataset
-# from augmentation import get_train_augmentation
-
-from utils.safe_iou import fast_hist, per_class_iu, SemanticHierarchy, L3_CLASSES
+from models import load_segformer_b3, load_segnext_large
 from utils.plot import plot_all
+from utils.safe_iou import L3_CLASSES, SemanticHierarchy, fast_hist, per_class_iu
 
 # --------------------------------------------------
 # Safe IoU hierarchy setup
@@ -382,7 +380,6 @@ def compute_metrics(eval_pred):
 # Main training pipeline
 # --------------------------------------------------
 def main():
-
     parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=str, default="configs/segnext_large.yaml")
     args = parser.parse_args()
@@ -393,14 +390,14 @@ def main():
     if cfg["model"].get("name", "segformer-b3") == "segformer-b3":
         model, processor = load_segformer_b3(
             num_classes=cfg["model"]["num_classes"],
-            checkpoint=cfg["model"]["pretrained_checkpoint"],
+            checkpoint=cfg["model"].get("pretrained_checkpoint"),
             image_size=cfg["model"]["image_size"],
         )
     else:
         model, processor = load_segnext_large(
             num_classes=cfg["model"]["num_classes"],
             image_size=cfg["model"]["image_size"],
-            checkpoint=cfg["model"].get("pretrained_checkpoint", None),
+            checkpoint=cfg["model"].get("pretrained_checkpoint"),
         )
 
     processor.do_reduce_labels = cfg["dataset"]["reduce_labels"]
@@ -562,4 +559,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
