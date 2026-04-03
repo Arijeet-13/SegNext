@@ -2,7 +2,7 @@ model:
   name: segnext-large
   pretrained_checkpoint: null # Set this to the cityscapes weights path in Kaggle
   num_classes: 26
-  image_size: 1024
+  image_size: 768
 
 dataset:
   name: idd
@@ -45,6 +45,6 @@ paths:
   best_model_dir: /kaggle/working/outputs/segnext_large/best_model
 
 hardware:
-  fp16: true
+  fp16: false
   num_workers: 4
   pin_memory: true
