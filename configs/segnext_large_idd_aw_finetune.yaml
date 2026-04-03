@@ -4,7 +4,7 @@ model:
   # Example: /kaggle/working/outputs/segnext_large_idd_pretrain/best_model
   pretrained_checkpoint: /kaggle/working/outputs/segnext_large_idd_pretrain/best_model
   num_classes: 26
-  image_size: 1024
+  image_size: 768
 
 dataset:
   name: idd_aw
@@ -13,13 +13,13 @@ dataset:
 
 training:
   # Finetune: smaller LR, fewer epochs
-  epochs: 30
-  train_batch_size: 1
-  val_batch_size: 1
-  learning_rate: 0.00001
+  epochs: 60
+  train_batch_size: 2
+  val_batch_size: 2
+  learning_rate: 0.00003
   weight_decay: 0.01
   warmup_ratio: 0.1
-  gradient_accumulation_steps: 8
+  gradient_accumulation_steps: 4
   save_strategy: epoch
   eval_strategy: epoch
   logging_steps: 50
@@ -35,7 +35,7 @@ optimizer:
 
 scheduler:
   name: polynomial
-  power: 1.0
+  power: 0.9
   min_lr: 0.0
 
 paths:
