@@ -1,14 +1,10 @@
-import yaml
-with open('config.yaml') as fh:
-    config = yaml.load(fh, Loader=yaml.FullLoader)
-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from functools import partial
 
 #//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-norm_layer = partial(nn.SyncBatchNorm, momentum=float(config.get('SyncBN_MOM', 0.1)))
+norm_layer = partial(nn.SyncBatchNorm, momentum=0.1)
 
 class myLayerNorm(nn.Module):
     def __init__(self, inChannels):
@@ -26,13 +22,13 @@ class myLayerNorm(nn.Module):
 
 
 class NormLayer(nn.Module):
-    def __init__(self, inChannels, norm_type=config['norm_typ']):
+    def __init__(self, inChannels, norm_type='sync_bn'):
         super().__init__()
         self.inChannels = inChannels
         self.norm_type = norm_type
         if norm_type == 'batch_norm':
             # print('Adding Batch Norm layer') # for testing
-            self.norm = nn.BatchNorm2d(inChannels, eps=1e-5, momentum=float(config['BN_MOM']))
+            self.norm = nn.BatchNorm2d(inChannels, eps=1e-5, momentum=0.9)
         elif norm_type == 'sync_bn':
             # print('Adding Sync-Batch Norm layer') # for testing
             self.norm = norm_layer(inChannels)
@@ -175,7 +171,7 @@ class ConvBNRelu(nn.Module):
         self.conv = nn.Conv2d(inChannels, outChannels, kernel_size=kernel,
                               padding=padding, stride=stride, dilation=dilation,
                               groups=groups, bias=False)
-        self.norm = NormLayer(outChannels, norm_type=config['norm_typ'])
+        self.norm = NormLayer(outChannels, norm_type='sync_bn')
         self.act = nn.ReLU(inplace=True)
     
     def forward(self, x):
